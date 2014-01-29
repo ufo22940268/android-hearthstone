@@ -44,6 +44,7 @@ public class Constants {
          * Base URL for all requests
          */
         public static final String URL_BASE = "https://api.parse.com";
+        public static final String URL_HS_BASE = "http://192.168.1.101:5000";
 
         /**
          * Authentication URL
@@ -64,6 +65,8 @@ public class Constants {
          * List Checkin's URL
          */
         public static final String URL_CHECKINS = URL_BASE + "/1/classes/Locations";
+        
+        public static final String URL_DECKS = URL_HS_BASE + "hero_deck";
 
         public static final String PARSE_APP_ID = "zHb2bVia6kgilYRWWdmTiEJooYA17NnkBSUVsr4H";
         public static final String PARSE_REST_API_KEY = "N2kCY1T3t3Jfhf9zpJ5MCURn3b25UpACILhnf5u9";

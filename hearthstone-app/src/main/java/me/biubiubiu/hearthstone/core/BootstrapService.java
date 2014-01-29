@@ -6,6 +6,7 @@ import static me.biubiubiu.hearthstone.core.Constants.Http.HEADER_PARSE_REST_API
 import static me.biubiubiu.hearthstone.core.Constants.Http.PARSE_APP_ID;
 import static me.biubiubiu.hearthstone.core.Constants.Http.PARSE_REST_API_KEY;
 import static me.biubiubiu.hearthstone.core.Constants.Http.URL_CHECKINS;
+import static me.biubiubiu.hearthstone.core.Constants.Http.*;
 import static me.biubiubiu.hearthstone.core.Constants.Http.URL_NEWS;
 import static me.biubiubiu.hearthstone.core.Constants.Http.URL_USERS;
 
@@ -63,6 +64,13 @@ public class BootstrapService {
         private List<CheckIn> results;
 
     }
+
+    public static class DeckWrapper {
+
+        public List<Deck> results;
+
+    }
+
 
     private static class JsonException extends IOException {
 
@@ -124,7 +132,7 @@ public class BootstrapService {
 
     private HttpRequest configure(final HttpRequest request) {
         request.connectTimeout(TIMEOUT).readTimeout(TIMEOUT);
-        request.userAgent(userAgentProvider.get());
+        // request.userAgent(userAgentProvider.get());
 
         if(isPostOrPut(request))
             request.contentType(Constants.Http.CONTENT_TYPE_JSON); // All PUT & POST requests to Parse.com api must be in JSON - https://www.parse.com/docs/rest#general-requests
@@ -228,5 +236,4 @@ public class BootstrapService {
             throw e.getCause();
         }
     }
-
 }

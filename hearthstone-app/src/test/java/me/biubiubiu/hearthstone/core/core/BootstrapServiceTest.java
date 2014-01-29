@@ -1,9 +1,8 @@
-
-
 package me.biubiubiu.hearthstone.core.core;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.doReturn;
 
 import me.biubiubiu.hearthstone.core.BootstrapService;
@@ -42,6 +41,7 @@ public class BootstrapServiceTest {
         return new BufferedReader(new InputStreamReader(new ByteArrayInputStream(
                 value.getBytes(HttpRequest.CHARSET_UTF8))));
     }
+
 
     @Mock
     private HttpRequest request;
@@ -101,4 +101,11 @@ public class BootstrapServiceTest {
         assertNotNull(referrers);
         assertTrue(referrers.isEmpty());
     }
+
+    // @Test
+    // public void getDecksResponse() throws IOException {
+    //     doReturn(createReader("")).when(request).bufferedReader();
+    //     String deck  = service.getDecks();
+    //     assertNotNull(deck);
+    // }
 }

@@ -20,3 +20,4 @@ gen-external-apklibs
 out
 .DS_Store
 classes
+/hearthstone-app/TAGS

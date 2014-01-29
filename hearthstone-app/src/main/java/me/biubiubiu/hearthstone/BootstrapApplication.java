@@ -9,8 +9,14 @@ import android.app.Instrumentation;
 import android.content.Context;
 
 import com.github.kevinsawicki.http.HttpRequest;
+import com.novoda.imageloader.core.ImageManager;
+import com.novoda.imageloader.core.LoaderSettings.SettingsBuilder;
+import com.novoda.imageloader.core.cache.LruBitmapCache;
+
 
 import dagger.ObjectGraph;
+import android.util.LruCache;
+import android.graphics.Bitmap;
 
 /**
  * hearthstone application
@@ -18,7 +24,9 @@ import dagger.ObjectGraph;
 public class BootstrapApplication extends Application {
 
     private static BootstrapApplication instance;
-
+    private static ImageManager mImageManager;
+    private static LruCache mCache;
+    
     /**
      * Create main application
      */
@@ -28,6 +36,11 @@ public class BootstrapApplication extends Application {
         if (SDK_INT <= FROYO)
             HttpRequest.keepAlive(false);
     }
+
+    public static ImageManager getImageLoader() {
+        return mImageManager;
+    }
+
 
     /**
      * Create main application
@@ -48,6 +61,17 @@ public class BootstrapApplication extends Application {
 
         // Perform injection
         Injector.init(getRootModule(), this);
+
+        mImageManager = new ImageManager(this, new SettingsBuilder()
+                                         .withCacheManager(new LruBitmapCache(this))
+                                         .build(this));
+
+        int cacheSize = 4 * 1024 * 1024; // 4MiB
+        mCache = new LruCache(cacheSize) {
+                protected int sizeOf(String key, Bitmap value) {
+                    return value.getByteCount();
+                }
+            };
 
     }
 

@@ -25,4 +25,10 @@ public class BootstrapApiClientUtilTest {
 
         assertThat(users.get(0).getUsername(), notNullValue());
     }
+
+    @Test
+    public void testHearthstoneApi() {
+        String k = "asdfasf";
+        assertThat(k, notNullValue());
+    }
 }

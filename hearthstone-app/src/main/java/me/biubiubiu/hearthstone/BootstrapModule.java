@@ -34,7 +34,9 @@ import dagger.Provides;
                 UserActivity.class,
                 UserListFragment.class,
                 TimerService.class,
-                MainActivity.class
+                MainActivity.class,
+                DeckListActivity.class,
+                CardListActivity.class,
         }
 
 )

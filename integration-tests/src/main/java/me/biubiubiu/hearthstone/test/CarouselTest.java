@@ -24,5 +24,6 @@ public class CarouselTest extends ActivityInstrumentationTestCase2<CarouselActiv
      */
     public void testActivityExists() {
         assertNotNull(getActivity());
+        int i = 1/0;
     }
 }
