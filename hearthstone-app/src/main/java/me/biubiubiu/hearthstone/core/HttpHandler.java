@@ -67,10 +67,7 @@ public class HttpHandler {
         AsyncHttpClient client = new AsyncHttpClient();
         String url = getUrl(endPoint);
         RequestParams params = new RequestParams();
-        params.put("max_results", "20");
         putParams(params, entity);
-        params.put("sort", "[(\"_id\", -1)]");
-        params.put("token", USER_TOKEN);
 
         final String fullUrl = AsyncHttpClient.getUrlWithQueryString(url, params);
         if (DEBUG) {
