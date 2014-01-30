@@ -62,6 +62,7 @@ public class DeckListActivity extends BootstrapFragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);  
 
         setContentView(R.layout.activity_deck_list);
         Views.inject(this);
@@ -94,14 +95,22 @@ public class DeckListActivity extends BootstrapFragmentActivity
     private void loadData() {
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("name", mHero);
+        setProgressBarIndeterminateVisibility(true);
         mHttpHandler.get("hero_deck", map, new ResponseHandler() {
                 @Override
                 public void onSuccess(String result) {
                     Gson gson = new Gson();
                     mWrapper = gson.fromJson(result, Deck[].class);
-                    mAdapter.addAll(mWrapper[0], mWrapper[1]);
+                    mAdapter.addAll(mWrapper);
                     mAdapter.notifyDataSetChanged();
+                    setProgressBarIndeterminateVisibility(false);
                 }
+
+                @Override
+                public void onFinish() {
+                    setProgressBarIndeterminateVisibility(false);
+                }
+
             });
     }
 

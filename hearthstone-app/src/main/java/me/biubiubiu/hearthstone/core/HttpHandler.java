@@ -222,6 +222,7 @@ public class HttpHandler {
             }
 
             mMyHandler.onSuccess(response);
+            mMyHandler.onFinish();
             dismissLoading();
         }
 
@@ -230,6 +231,7 @@ public class HttpHandler {
             if (DEBUG) {
                 Log.d(TAG, "++++++++++++++++++++response failed:" + response);
             }
+            mMyHandler.onFinish();
             Toast.makeText(mContext,
                            "出错了，请重试", Toast.LENGTH_LONG).show();
             dismissLoading();
