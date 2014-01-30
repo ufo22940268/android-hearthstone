@@ -67,9 +67,10 @@ public class CardListActivity extends BootstrapFragmentActivity {
 
         setContentView(R.layout.activity_card_list);
         imageManager = BootstrapApplication.getImageLoader();
-        imageTagFactory = ImageTagFactory.newInstance(this, R.drawable.transparent);
-        
+        imageTagFactory = ImageTagFactory.newInstance(this, R.drawable.card_loading);
+
         Views.inject(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (mDeck == null) {
             throw new RuntimeException("deck must be set before start activity.");
@@ -85,7 +86,18 @@ public class CardListActivity extends BootstrapFragmentActivity {
         fancyCoverFlow.setAdapter(new ViewGroupExampleAdapter());
 
     }
-    
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
     public  void loadPhoto(ImageView view, String url) {
         view.setTag(imageTagFactory.build(url, this));
         imageManager.getLoader().load(view);
@@ -120,71 +132,23 @@ public class CardListActivity extends BootstrapFragmentActivity {
 
         @Override
         public View getCoverFlowItem(int i, View reuseableView, ViewGroup viewGroup) {
-            CustomViewGroup customViewGroup = null;
+            View galleryItem = null;
 
             if (reuseableView != null) {
-                customViewGroup = (CustomViewGroup) reuseableView;
+                galleryItem = (View) reuseableView;
             } else {
-                customViewGroup = new CustomViewGroup(viewGroup.getContext());
-                customViewGroup.setLayoutParams(new FancyCoverFlow.LayoutParams(300, 600));
+                galleryItem = LayoutInflater.from(CardListActivity.this).inflate(R.layout.gallery_item, viewGroup, false);
+                galleryItem.setLayoutParams(new FancyCoverFlow.LayoutParams(300, 600));
             }
+            Card card = getItem(i);
 
-            loadPhoto(customViewGroup.getImageView(), getItem(i).pic);
+            ImageView iv = (ImageView)galleryItem.findViewById(R.id.image);
+            loadPhoto(iv, card.pic);
 
-            return customViewGroup;
-        }
-    }
-    
-    private static class CustomViewGroup extends LinearLayout {
+            TextView tv = (TextView)galleryItem.findViewById(R.id.desc);
+            tv.setText(card.name + " x" + card.count);
 
-        // =============================================================================
-        // Child views
-        // =============================================================================
-
-        private ImageView imageView;
-
-        private Button button;
-
-        // =============================================================================
-        // Constructor
-        // =============================================================================
-
-        private CustomViewGroup(Context context) {
-            super(context);
-
-            this.setOrientation(VERTICAL);
-            this.setWeightSum(5);
-
-            this.imageView = new ImageView(context);
-            this.button = new Button(context);
-
-            LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
-            this.imageView.setLayoutParams(layoutParams);
-            this.button.setLayoutParams(layoutParams);
-
-            this.imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            this.imageView.setAdjustViewBounds(true);
-
-            this.button.setText("Goto GitHub");
-            this.button.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://davidschreiber.github.com/FancyCoverFlow"));
-                        view.getContext().startActivity(i);
-                    }
-                });
-
-            this.addView(this.imageView);
-            this.addView(this.button);
-        }
-
-        // =============================================================================
-        // Getters
-        // =============================================================================
-
-        private ImageView getImageView() {
-            return imageView;
+            return galleryItem;
         }
     }
 }

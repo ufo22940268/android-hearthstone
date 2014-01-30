@@ -58,23 +58,37 @@ public class DeckListActivity extends BootstrapFragmentActivity
     private ArrayAdapter<Deck> mAdapter;
     private Deck[] mWrapper;
     private String mHero = "术士";
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_deck_list);
         Views.inject(this);
-        mHttpHandler = new HttpHandler(this);
-        mAdapter = new ArrayAdapter<Deck>(this, android.R.layout.simple_list_item_1, new ArrayList<Deck>());
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
         Intent intent = getIntent();
         if (intent.hasExtra("hero")) {
             mHero = intent.getStringExtra("hero");
         }
         getActionBar().setTitle(mHero + "推荐套牌");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mHttpHandler = new HttpHandler(this);
+
+        mAdapter = new ArrayAdapter<Deck>(this, android.R.layout.simple_list_item_1, new ArrayList<Deck>());
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(this);
         loadData();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private void loadData() {

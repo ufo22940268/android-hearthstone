@@ -45,7 +45,7 @@ import net.simonvt.menudrawer.MenuDrawer;
 public class MainActivity extends BootstrapFragmentActivity {
 
     @InjectView(R.id.content) GridView mGridView;
-
+    private MenuAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,30 +55,50 @@ public class MainActivity extends BootstrapFragmentActivity {
 
         setContentView(R.layout.activity_main);
         Views.inject(this);
-
-        mGridView.setAdapter(new MenuAdapter());
+        
+        mAdapter = new MenuAdapter();
+        mGridView.setAdapter(mAdapter);
         
         //Dynamic column count
         float scalefactor = getResources().getDisplayMetrics().density * 142;
         int number = getWindowManager().getDefaultDisplay().getWidth();
         int columns = (int) ((float) number / (float) scalefactor);
         mGridView.setNumColumns(columns);
+        mGridView.setOnItemClickListener(mAdapter);
     }
-
-    public class MenuAdapter extends BaseAdapter {
+    
+    public class MenuAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
         public final int[] MENU_RES = {
-            R.drawable.btn_class_druid,
-            R.drawable.btn_class_hunter,
-            R.drawable.btn_class_mage,
-            R.drawable.btn_class_paladin,
-            R.drawable.btn_class_priest,
-            R.drawable.btn_class_rogue,
-            R.drawable.btn_class_shaman,
-            R.drawable.btn_class_warlock,
-            R.drawable.btn_class_warrior,
+            R.drawable.btn_class_druid, 
+            R.drawable.btn_class_hunter, 
+            R.drawable.btn_class_mage, 
+            R.drawable.btn_class_paladin, 
+            R.drawable.btn_class_priest, 
+            R.drawable.btn_class_rogue, 
+            R.drawable.btn_class_shaman, 
+            R.drawable.btn_class_warlock, 
+            R.drawable.btn_class_warrior, 
         };
 
+        public final String[] MENU_STRS = {
+            "德鲁伊",
+            "猎人",
+            "法师",
+            "圣骑士",
+            "牧师",
+            "盗贼",
+            "萨满",
+            "术士",
+            "战士",
+        };
+
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            Intent intent = new Intent(MainActivity.this, DeckListActivity.class);
+            intent.putExtra("hero", MENU_STRS[position]);
+            startActivity(intent);
+        }
         
         public int getCount() {
             return MENU_RES.length;

@@ -14,6 +14,7 @@ public class Deck {
         public String pic;
         public int count;
         public String id;
+        public String name;
     }
 }
 
