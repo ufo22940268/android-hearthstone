@@ -80,8 +80,8 @@ public class CardListActivity extends BootstrapFragmentActivity {
 
         FancyCoverFlow fancyCoverFlow = (FancyCoverFlow) findViewById(R.id.fancyCoverFlow);
         fancyCoverFlow.setReflectionEnabled(true);
-        fancyCoverFlow.setReflectionRatio(0.3f);
-        fancyCoverFlow.setReflectionGap(0);
+        fancyCoverFlow.setReflectionRatio(0.2f);
+        fancyCoverFlow.setReflectionGap(-50);
 
         fancyCoverFlow.setAdapter(new ViewGroupExampleAdapter());
 
@@ -143,6 +143,7 @@ public class CardListActivity extends BootstrapFragmentActivity {
             Card card = getItem(i);
 
             ImageView iv = (ImageView)galleryItem.findViewById(R.id.image);
+            iv.setImageResource(R.drawable.card_loading);
             loadPhoto(iv, card.pic);
 
             TextView tv = (TextView)galleryItem.findViewById(R.id.desc);

@@ -195,10 +195,10 @@
                        This will keep the keystore out of your file so no prying eyes can see.
                        Also, if you have a ci (Continuous Integration) profile, these values can be
                        passed in via the build server. -->
-                  <keystore>${bootstrap.sign.keystore}</keystore>
-                  <alias>${bootstrap.sign.alias}</alias>
-                  <storepass>${bootstrap.sign.storepass}</storepass>
-                  <keypass>${bootstrap.sign.keypass}</keypass>
+                  <keystore>my-release-key.keystore</keystore>
+                  <alias>alias_name</alias>
+                  <storepass>123456</storepass>
+                  <keypass>123456</keypass>
                   <verbose>true</verbose>
                 </configuration>
               </execution>
