@@ -14,6 +14,8 @@ import android.graphics.*;
 import android.view.animation.*;
 import android.text.TextUtils;
 import android.support.v4.app.*;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.accounts.OperationCanceledException;
 
@@ -43,28 +45,30 @@ import javax.inject.Inject;
 import butterknife.InjectView;
 import butterknife.Views;
 import net.simonvt.menudrawer.MenuDrawer;
+import com.viewpagerindicator.PageIndicator;
+import com.viewpagerindicator.TabPageIndicator;
 
 
 /**
  * Activity to view the carousel and view pager indicator with fragments.
  */
-public class DeckListActivity extends BootstrapFragmentActivity
-    implements AdapterView.OnItemClickListener {
+public class DeckListActivity extends BootstrapFragmentActivity {
 
-    @InjectView(R.id.list) ListView mListView;
     @Inject protected BootstrapServiceProvider serviceProvider;
-
-    private HttpHandler mHttpHandler;
-    private ArrayAdapter<Deck> mAdapter;
-    private Deck[] mWrapper;
+    FragmentPagerAdapter mAdapter;
+    private DeckListFragment mDeckFragment;
     private String mHero = "术士";
+    
+    private String[] TITLES = {
+        "套牌推荐",
+        "奥秘牌",
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);  
-
-        setContentView(R.layout.activity_deck_list);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        setContentView(R.layout.activity_hero);
         Views.inject(this);
         Intent intent = getIntent();
         if (intent.hasExtra("hero")) {
@@ -73,50 +77,44 @@ public class DeckListActivity extends BootstrapFragmentActivity
         getActionBar().setTitle(mHero + "推荐套牌");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mHttpHandler = new HttpHandler(this);
+        TabPageIndicator indicator = (TabPageIndicator)findViewById(R.id.content_indicator);
+        ViewPager pager = (ViewPager)findViewById(R.id.content_pager);
 
-        mAdapter = new ArrayAdapter<Deck>(this, android.R.layout.simple_list_item_1, new ArrayList<Deck>());
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
-        loadData();
+        if (mAdapter == null) {
+            mAdapter = new ContentAdapter(getSupportFragmentManager());
+        }
+        pager.setAdapter(mAdapter);
+        indicator.setViewPager(pager);
+
+        mDeckFragment = new DeckListFragment();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+    //Content fragment. Used to display ticket, summary and nearby restarant.
+    private class ContentAdapter extends FragmentPagerAdapter {
+
+        public ContentAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                return mDeckFragment; 
+            } else {
+                // return mDeckFragment;
+                return new Fragment();
+            }
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return TITLES[position % TITLES.length];
+        }
+
+        @Override
+        public int getCount() {
+            return TITLES.length;
         }
     }
 
-    private void loadData() {
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put("name", mHero);
-        setProgressBarIndeterminateVisibility(true);
-        mHttpHandler.get("hero_deck", map, new ResponseHandler() {
-                @Override
-                public void onSuccess(String result) {
-                    Gson gson = new Gson();
-                    mWrapper = gson.fromJson(result, Deck[].class);
-                    mAdapter.addAll(mWrapper);
-                    mAdapter.notifyDataSetChanged();
-                    setProgressBarIndeterminateVisibility(false);
-                }
-
-                @Override
-                public void onFinish() {
-                    setProgressBarIndeterminateVisibility(false);
-                }
-
-            });
-    }
-
-    public void onItemClick(AdapterView parent, View view, int position, long id) {
-        CardListActivity.mDeck = mWrapper[position];
-        Intent intent = new Intent(this, CardListActivity.class);
-        startActivity(intent);
-    }
 }

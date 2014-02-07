@@ -27,11 +27,13 @@ public class HttpHandler {
 
     static public final boolean DEBUG = true;
     static public final String TAG = "HttpHandler";
-    static public final String BASE_URL = "http://api.hearthstone.biubiubiu.me/";
+    // static public final String BASE_URL = "http://api.hearthstone.biubiubiu.me/";
+
+    // debug url
+    static public final String BASE_URL = "http://192.168.1.100:5000/";
     private Context mContext;
     private ProgressDialog mLoadingDialog;
     static public final String USER_TOKEN = "52a468d91d24ead09274284d";
-
 
 
     public HttpHandler(Context context) {
