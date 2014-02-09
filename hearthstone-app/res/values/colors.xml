@@ -42,6 +42,8 @@
     <color name="nav_button_text_disabled">#464646</color>
     <color name="nav_background">#666b73</color>
     
+    <drawable name="nav_background">#666b73</drawable>
     <drawable name="transparent">#000000</drawable>
+    <drawable name="blue">#66ccff</drawable>
 
 </resources>

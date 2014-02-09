@@ -1,5 +1,6 @@
 package me.biubiubiu.hearthstone.ui;
 
+import me.biubiubiu.hearthstone.BootstrapApplication;
 import android.util.*;
 import android.widget.*;
 import android.view.*;
@@ -47,6 +48,8 @@ import butterknife.Views;
 import net.simonvt.menudrawer.MenuDrawer;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
+import com.novoda.imageloader.core.ImageManager;
+import com.novoda.imageloader.core.model.ImageTagFactory;
 
 
 /**
@@ -57,8 +60,11 @@ public class DeckListActivity extends BootstrapFragmentActivity {
     @Inject protected BootstrapServiceProvider serviceProvider;
     FragmentPagerAdapter mAdapter;
     private DeckListFragment mDeckFragment;
+    private SecretListFragment mSecretFragment;
     private String mHero = "术士";
-    
+    private ImageManager imageManager;
+    protected ImageTagFactory imageTagFactory;
+
     private String[] TITLES = {
         "套牌推荐",
         "奥秘牌",
@@ -69,12 +75,15 @@ public class DeckListActivity extends BootstrapFragmentActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_hero);
+        imageManager = BootstrapApplication.getImageLoader();
+        imageTagFactory = ImageTagFactory.newInstance(this, R.drawable.card_loading);
+
         Views.inject(this);
         Intent intent = getIntent();
         if (intent.hasExtra("hero")) {
             mHero = intent.getStringExtra("hero");
         }
-        getActionBar().setTitle(mHero + "推荐套牌");
+        getActionBar().setTitle(mHero);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         TabPageIndicator indicator = (TabPageIndicator)findViewById(R.id.content_indicator);
@@ -87,6 +96,19 @@ public class DeckListActivity extends BootstrapFragmentActivity {
         indicator.setViewPager(pager);
 
         mDeckFragment = new DeckListFragment();
+        mSecretFragment = new SecretListFragment();
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     //Content fragment. Used to display ticket, summary and nearby restarant.
@@ -99,10 +121,9 @@ public class DeckListActivity extends BootstrapFragmentActivity {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                return mDeckFragment; 
+                return mDeckFragment;
             } else {
-                // return mDeckFragment;
-                return new Fragment();
+                return mSecretFragment;
             }
         }
 

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/raw_main_bg"
+                >
 
   <com.viewpagerindicator.TabPageIndicator
      android:id="@+id/content_indicator"
@@ -15,7 +16,8 @@
      android:id="@+id/content_pager"
      android:layout_width="fill_parent"
      android:layout_height="0dp"
-     android:layout_weight="1"
+     android:layout_below="@id/content_indicator"
+     android:layout_alignParentBottom="true"
      />
 
-</LinearLayout>
+</RelativeLayout>
